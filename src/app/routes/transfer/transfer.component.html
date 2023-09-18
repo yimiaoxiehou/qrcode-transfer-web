@@ -1,0 +1,5 @@
+<input type="file" (change)="change($event)" multiple="false" class="ml-sm" />
+<ng-container *ngIf="value">
+  <h4>{{ loopIndex }} / {{ total }}</h4>
+  <qrcode [qrData]="value" [allowEmptyString]="true" [width]="600" [errorCorrectionLevel]="'L'" />
+</ng-container>
