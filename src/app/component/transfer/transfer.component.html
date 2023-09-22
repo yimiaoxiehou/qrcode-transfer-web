@@ -1,0 +1,80 @@
+<nz-card style="width: 400px; height: 40vh; max-width: 80vw; margin: 150px auto">
+  <nz-radio-group [(ngModel)]="loopTime" (ngModelChange)="changeLoopSpeed()">
+    <label nz-radio nzValue="100">快速</label>
+    <label nz-radio nzValue="200">中等</label>
+    <label nz-radio nzValue="400">慢速</label>
+    <label nz-radio nzValue="800">特慢</label>
+  </nz-radio-group>
+  <p></p>
+  <nz-upload nzType="drag" [nzMultiple]="false" [nzShowUploadList]="false" (nzChange)="change($event)">
+    <p class="ant-upload-drag-icon">
+      <span nz-icon nzType="inbox"></span>
+    </p>
+    <p class="ant-upload-text">点击或拖拽文件至此区域即可上传</p>
+  </nz-upload>
+</nz-card>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  *ngIf="isVisible"
+  [nzMaskClosable]="false"
+  [nzWidth]="'650px'"
+  [nzTitle]="title"
+  [nzFooter]="footer"
+  (nzOnCancel)="handleOk()"
+  [nzBodyStyle]="modalBodyStyle"
+>
+  <ng-container *nzModalContent>
+    <ng-container>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">文件名</nz-form-label>
+        <nz-form-control [nzSpan]="12">{{ filename }}</nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">文件大小</nz-form-label>
+        <nz-form-control [nzSpan]="12">{{ filesize }}</nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">文件 MD5</nz-form-label>
+        <nz-form-control [nzSpan]="12">{{ filehash }}</nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">限制轮询范围</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-input-number-group nz-row [nzGutter]="8" nzSize="default">
+            <div nz-col nzSpan="6">
+              <nz-input-number
+                nzSize="small"
+                [(ngModel)]="loopStart"
+                (ngModelChange)="setResetLoop()"
+                [nzMin]="0"
+                [nzMax]="total"
+                [nzStep]="1"
+                style="width: 100%"
+              />
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-input-number
+                nzSize="small"
+                [(ngModel)]="loopEnd"
+                (ngModelChange)="setResetLoop()"
+                [nzMin]="0"
+                [nzMax]="total"
+                [nzStep]="1"
+                style="width: 100%"
+              />
+            </div>
+          </nz-input-number-group>
+        </nz-form-control>
+      </nz-form-item>
+      <qrcode nz-row [qrData]="value" [allowEmptyString]="true" [width]="600" [errorCorrectionLevel]="'L'" />
+    </ng-container>
+  </ng-container>
+</nz-modal>
+
+<ng-template #title>
+  <h4>发送中 [ {{ loopIndex }} / {{ total }} ]</h4>
+</ng-template>
+<ng-template #footer>
+  <button nz-button nzType="primary" nzDanger (click)="handleOk()">结束传输</button>
+</ng-template>

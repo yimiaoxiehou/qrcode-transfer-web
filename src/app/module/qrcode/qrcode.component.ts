@@ -26,7 +26,17 @@ import { QRCodeVersion, QRCodeElementType, FixMeLater } from './types';
 @Component({
   selector: 'qrcode',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<div #qrcElement [class]="cssClass"></div>`
+  template: `<div #qrcElement [class]="cssClass"></div>`,
+  styles: [
+    `
+      :root {
+        width: max-content;
+      }
+      div {
+        width: max-content;
+      }
+    `
+  ]
 })
 export class QRCodeComponent implements OnChanges {
   @Input() public allowEmptyString = false;

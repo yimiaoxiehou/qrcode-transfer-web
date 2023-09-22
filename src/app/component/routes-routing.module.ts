@@ -9,12 +9,9 @@ import { ReceiveComponent } from './receive/receive.component';
 import { TransferComponent } from './transfer/transfer.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'receive', pathMatch: 'full' },
-  { path: 'transfer', component: TransferComponent, data: { title: '仪表盘', titleI18n: 'dashboard' } },
-  { path: 'receive', component: ReceiveComponent, data: { title: '仪表盘', titleI18n: 'dashboard' } },
-  { path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule) },
-  // 单页不包裹Layout
-  { path: '**', redirectTo: 'exception/404' }
+  { path: '', redirectTo: 'transfer', pathMatch: 'full' },
+  { path: 'transfer', component: TransferComponent },
+  { path: 'receive', component: ReceiveComponent }
 ];
 
 @NgModule({
