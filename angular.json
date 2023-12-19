@@ -54,7 +54,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/qrcode-transfer-web",
+            "outputPath": "dist/qrcode-transfer-web/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -114,10 +114,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "qrcode-transfer-web:build:production"
+              "browserTarget": "qrcode-transfer-web:build"
             },
             "development": {
-              "browserTarget": "qrcode-transfer-web:build:development"
+              "browserTarget": "qrcode-transfer-web:build"
             }
           },
           "defaultConfiguration": "development",
@@ -158,6 +158,67 @@
               "src/**/*.html"
             ]
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/qrcode-transfer-web/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules/"
+              ]
+            },
+            "inlineStyleLanguage": "less"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "qrcode-transfer-web:build",
+              "serverTarget": "qrcode-transfer-web:server"
+            },
+            "production": {
+              "browserTarget": "qrcode-transfer-web:build",
+              "serverTarget": "qrcode-transfer-web:server"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/transfer",
+              "/receive"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "qrcode-transfer-web:build",
+              "serverTarget": "qrcode-transfer-web:server"
+            },
+            "development": {
+              "browserTarget": "qrcode-transfer-web:build",
+              "serverTarget": "qrcode-transfer-web:server"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

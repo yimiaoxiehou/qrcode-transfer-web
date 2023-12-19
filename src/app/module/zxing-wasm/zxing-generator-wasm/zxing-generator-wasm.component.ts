@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { writeBarcodeToImageFile } from '@sec-ant/zxing-wasm';
+import { setZXingModuleOverrides, writeBarcodeToImageFile } from '@sec-ant/zxing-wasm';
 
 @Component({
   selector: 'app-zxing-generator-wasm',
@@ -12,6 +12,15 @@ export class ZxingGeneratorWasmComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
+    setZXingModuleOverrides({
+      locateFile: (path: string, prefix: any) => {
+        if (path.endsWith('.wasm')) {
+          return `./assets/${path}`;
+        }
+        return prefix + path;
+      }
+    });
+
     const writeOutput = await writeBarcodeToImageFile('Hello world!', {
       format: 'QRCode',
       charset: 'UTF-8',

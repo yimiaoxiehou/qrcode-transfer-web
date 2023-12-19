@@ -1,5 +1,7 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { ZXingReadOptions, ZXingReadOutput, readBarcodeFromImageData } from '@sec-ant/zxing-wasm';
+import { DOCUMENT } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
+import { ZXingReadOptions, ZXingReadOutput, readBarcodeFromImageData, setZXingModuleOverrides } from '@sec-ant/zxing-wasm';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -20,11 +22,25 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
     formats: ['QRCode'],
     maxSymbols: 1
   };
+  messageService: NzMessageService;
 
-  constructor() {}
+  constructor(
+    @Inject(DOCUMENT) private _doc: Document,
+    messageService: NzMessageService
+  ) {
+    this.messageService = messageService;
+  }
 
   ngAfterViewInit(): void {
-    navigator.mediaDevices
+    if (this._doc.defaultView?.navigator === undefined) {
+      return;
+    }
+    const nav = this._doc.defaultView?.navigator;
+    if (nav.mediaDevices === undefined) {
+      return;
+    }
+    const mediaDevices = nav.mediaDevices;
+    mediaDevices
       .enumerateDevices()
       .then(devices => {
         const cameras = devices.filter(device => device.kind === 'videoinput');
@@ -39,13 +55,22 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
         }
       })
       .finally(() => {
-        navigator.mediaDevices
+        nav.mediaDevices
           .getUserMedia({
             video: {
               deviceId: this.cameraId
             }
           })
           .then(stream => {
+            setZXingModuleOverrides({
+              locateFile: (path: string, prefix: any) => {
+                if (path.endsWith('.wasm')) {
+                  return `./assets/${path}`;
+                }
+                return prefix + path;
+              }
+            });
+
             this.decodeFromCamera(stream);
           })
           .catch(function (err0r) {

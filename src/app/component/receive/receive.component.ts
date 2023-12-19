@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { filesize } from 'filesize';
 import * as md5 from 'md5';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -17,7 +17,7 @@ import pako from 'pako';
     `
   ]
 })
-export class ReceiveComponent implements AfterViewInit {
+export class ReceiveComponent {
   fileContent!: Uint8Array[];
   filename!: string;
   filesize!: string;
@@ -35,9 +35,6 @@ export class ReceiveComponent implements AfterViewInit {
 
   constructor(messageService: NzMessageService) {
     this.messageService = messageService;
-  }
-  ngAfterViewInit(): void {
-    this.resetProgress();
   }
 
   decodeResult(results: Array<import('@sec-ant/zxing-wasm').ZXingReadOutput>) {
@@ -188,7 +185,7 @@ export class ReceiveComponent implements AfterViewInit {
       ctx.fill(rectangle);
     }
   }
-  
+
   handleOk(): void {
     this.isVisible = false;
   }
