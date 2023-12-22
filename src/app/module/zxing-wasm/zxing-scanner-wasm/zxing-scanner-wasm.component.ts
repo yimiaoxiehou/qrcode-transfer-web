@@ -40,52 +40,37 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
       return;
     }
     const mediaDevices = nav.mediaDevices;
-    mediaDevices
-      .enumerateDevices()
-      .then(devices => {
-        const cameras = devices.filter(device => device.kind === 'videoinput');
-        if (cameras.length === 1) {
-          this.cameraId = cameras[0].deviceId;
-          return;
-        }
-        if (this.useFrontCamera) {
-          this.cameraId = cameras.filter(c => c.label.indexOf('facing front') >= 0)[0].deviceId;
-        } else {
-          this.cameraId = cameras.filter(c => c.label.indexOf('facing back') >= 0)[0].deviceId;
-        }
-      })
-      .finally(() => {
-        nav.mediaDevices
-          .getUserMedia({
-            video: {
-              deviceId: this.cameraId
-            }
-          })
-          .then(stream => {
-            setZXingModuleOverrides({
-              locateFile: (path: string, prefix: any) => {
-                if (path.endsWith('.wasm')) {
-                  return `./assets/${path}`;
-                }
-                return prefix + path;
-              }
-            });
-
-            this.decodeFromCamera(stream);
-          })
-          .catch(function (err0r) {
-            console.log('Something went wrong!');
-          });
-      });
+    // 这里对生成视频进行配置
+    var userMediaConstraints = {
+      audio: false, // 是否获取音频
+      video: {
+        facingMode: 'environment'
+      }
+    };
+    mediaDevices.getUserMedia(userMediaConstraints).then(stream => {
+      // setZXingModuleOverrides({
+      //   locateFile: (path: string, prefix: any) => {
+      //     if (path.endsWith('.wasm')) {
+      //       return `./assets/${path}`;
+      //     }
+      //     return prefix + path;
+      //   }
+      // });
+      this.decodeFromCamera(stream);
+    });
   }
 
   decodeFromCamera(stream: MediaStream): void {
+    console.log(stream.getVideoTracks());
     const track = stream.getVideoTracks()[0];
-    const media_processor = new MediaStreamTrackProcessor({
-      track
-    });
+    console.log(track.contentHint);
+    console.log(4);
+    const media_processor = new MediaStreamTrackProcessor(track);
+    console.log(4);
     const canvas = this.canvas.nativeElement;
+    console.log(4);
     const ctx = canvas.getContext('2d');
+    console.log(4);
     if (ctx === null) {
       return;
     }
@@ -114,9 +99,11 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
   ): Observable<ZXingReadOutput[]> {
     return new Observable(subscriber => {
       const pump = () => {
+        console.log(1);
         reader
           .read()
           .then(({ done, value }) => {
+            console.log(11);
             if (done) {
               return;
             } else {

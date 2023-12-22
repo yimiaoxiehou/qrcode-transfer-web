@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { HtmlParser } from '@angular/compiler';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { filesize } from 'filesize';
 import * as md5 from 'md5';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -18,6 +19,7 @@ import pako from 'pako';
   ]
 })
 export class ReceiveComponent {
+  cameraReady: boolean = false;
   fileContent!: Uint8Array[];
   filename!: string;
   filesize!: string;
@@ -37,6 +39,28 @@ export class ReceiveComponent {
     this.messageService = messageService;
   }
 
+  check(): void {
+    console.log('check video permissions');
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: false,
+        video: {
+          facingMode: 'environment'
+        }
+      })
+      .then(stream => {
+        this.cameraReady = true;
+        const video = document.getElementById('video') as HTMLVideoElement;
+        video.style.width = `500px`;
+        video.style.height = `500px`;
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+        video.srcObject = stream;
+      })
+      .catch(err => console.log(err))
+      .finally(() => console.log('check finish'));
+  }
   decodeResult(results: Array<import('@sec-ant/zxing-wasm').ZXingReadOutput>) {
     results.forEach(result => {
       if (!result) {

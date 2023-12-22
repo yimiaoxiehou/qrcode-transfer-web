@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng s --host 0.0.0.0 --disable-host-check true  -o",
-    "build": "npm run ng-high-memory build && gzipper compress ./dist",
+    "start": "ng s --host 0.0.0.0 --disable-host-check true -o",
+    "build": "npm run ng-high-memory build --source-map && gzipper compress ./dist",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
