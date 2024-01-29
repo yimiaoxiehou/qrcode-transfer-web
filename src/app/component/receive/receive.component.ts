@@ -1,5 +1,4 @@
-import { HtmlParser } from '@angular/compiler';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { filesize } from 'filesize';
 import * as md5 from 'md5';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -19,53 +18,46 @@ import pako from 'pako';
   ]
 })
 export class ReceiveComponent {
+  // 摄像头是否准备好
   cameraReady: boolean = false;
+  // 文件内容
   fileContent!: Uint8Array[];
+  // 文件名
   filename!: string;
+  // 文件大小
   filesize!: string;
+  // 文件哈希
   filehash!: string;
+  // 文件Url
   fileUrl!: string;
+  // 文件类型
   type!: string;
+  // 总页数
   total!: number;
+  // 已扫描页数
   scanned!: number;
+  // 扫描结果
   @ViewChild('stage')
   stageCanvas!: ElementRef<HTMLCanvasElement>;
+  // 桶
   buckets!: number[];
+  // 桶大小
   bucketSize!: number;
+  // 消息服务
   messageService: NzMessageService;
+  // 弹窗是否显示
   isVisible = false;
 
   constructor(messageService: NzMessageService) {
     this.messageService = messageService;
   }
 
-  check(): void {
-    console.log('check video permissions');
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: {
-          facingMode: 'environment'
-        }
-      })
-      .then(stream => {
-        this.cameraReady = true;
-        const video = document.getElementById('video') as HTMLVideoElement;
-        video.style.width = `500px`;
-        video.style.height = `500px`;
-        video.setAttribute('autoplay', '');
-        video.setAttribute('muted', '');
-        video.setAttribute('playsinline', '');
-        video.srcObject = stream;
-      })
-      .catch(err => console.log(err))
-      .finally(() => console.log('check finish'));
-  }
   decodeResult(results: Array<import('@sec-ant/zxing-wasm').ZXingReadOutput>) {
     results.forEach(result => {
       if (!result) {
         return;
       }
+      console.log(result);
       // 二维码数据格式:
       // 首页：   `${curPage}/${totalPage}|${filename}|${filetype}|${data}`
       // 其他页： `${curPage}/${totalPage}|${data}`

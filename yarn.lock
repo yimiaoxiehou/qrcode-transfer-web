@@ -2468,6 +2468,11 @@
     "@tufjs/canonical-json" "1.0.0"
     minimatch "^9.0.0"
 
+"@twilio/webrtc@^4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@twilio/webrtc/-/webrtc-4.6.0.tgz#54279429f4fc6fc5780e6a1566f9703f3589560b"
+  integrity sha512-eS6FV9rbpoIW2rs1inPaRkHdghb0PWM6VJA3Njf8c/azhf9zifQ74u0JdYclM9xTwbqhS7aIHBJmnLvDEf5DEA==
+
 "@types/body-parser@*":
   version "1.19.2"
   resolved "https://maven.utpf.cn/repository/npm-public/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
@@ -2751,6 +2756,11 @@
     "@types/node" "*"
     "@types/unist" "*"
     "@types/vfile-message" "*"
+
+"@types/webrtc@^0.0.41":
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@types/webrtc/-/webrtc-0.0.41.tgz#681aeb099dc99abae5e999e17aca97774da7253e"
+  integrity sha512-8ffcmVtlMQe4GgVavKyCVRkiCOXguAkFNT6KmXb+aE5kB6D/qpI6aNpdHeHI206oJdmIhdTyObHbJ6I8Gq90Pg==
 
 "@types/ws@^8.5.5":
   version "8.5.5"
@@ -3067,6 +3077,27 @@
   integrity sha512-nzvgl3VfhcELQ8LyVrYOru+UtAy1nrygk2+AGbTm8a5YcO6o8lSjAT+pfg3vJWxIoZKOUhrK6UU7xW/+00kQrg==
   dependencies:
     argparse "^2.0.1"
+
+"@zxing/browser@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@zxing/browser/-/browser-0.1.4.tgz#8cfd4c58a45cca1e3fbf26122d3e2b3f4e867034"
+  integrity sha512-WYjaav7St4sj/u/Km2llE4NU2Pq3JFIWnczr0tmyCC1KUlp08rV3qpu7iiEB4kOx/CgcCzrSebNnSmFt5B3IFg==
+  optionalDependencies:
+    "@zxing/text-encoding" "^0.9.0"
+
+"@zxing/library@^0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.20.0.tgz#11bc411b87693015389555c589da61532879be7b"
+  integrity sha512-6Ev6rcqVjMakZFIDvbUf0dtpPGeZMTfyxYg4HkVWioWeN7cRcnUWT3bU6sdohc82O1nPXcjq6WiGfXX2Pnit6A==
+  dependencies:
+    ts-custom-error "^3.2.1"
+  optionalDependencies:
+    "@zxing/text-encoding" "~0.9.0"
+
+"@zxing/text-encoding@^0.9.0", "@zxing/text-encoding@~0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@zxing/text-encoding/-/text-encoding-0.9.0.tgz#fb50ffabc6c7c66a0c96b4c03e3d9be74864b70b"
+  integrity sha512-U/4aVJ2mxI0aDNI8Uq0wEhMgY+u4CNtEb0om3+y3+niDAsoTCOB33UF0sxpzqzdqXLqmvc+vZyAt4O8pPdfkwA==
 
 abab@^2.0.3, abab@^2.0.5, abab@^2.0.6:
   version "2.0.6"
@@ -5094,6 +5125,11 @@ detect-node@^2.0.4:
   version "2.1.0"
   resolved "https://maven.utpf.cn/repository/npm-public/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
+
+detectrtc@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/detectrtc/-/detectrtc-1.4.1.tgz#05ed7df92597b265dad5b226f8d31f670deb0cd1"
+  integrity sha512-lxvyNN6/dSnwoVj1VstVFHel7S0BTmkfv1+01IBEy42D20pue27eB/MfphUOQz78jJ7WcQJDo6ZybhgBlUDi0Q==
 
 dev-ip@^1.0.1:
   version "1.0.1"
@@ -10770,6 +10806,11 @@ schema-utils@^4.0.0:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.1.0"
 
+sdp@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/sdp/-/sdp-3.2.0.tgz#8961420552b36663b4d13ddba6f478d1461896a5"
+  integrity sha512-d7wDPgDV3DDiqulJjKiV2865wKsJ34YI+NDREbm+FySq6WuKOikwyNQcm+doLAZ1O6ltdO0SeKle2xMpN3Brgw==
+
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://maven.utpf.cn/repository/npm-public/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
@@ -12015,6 +12056,11 @@ ts-api-utils@^1.0.1:
   resolved "https://maven.utpf.cn/repository/npm-public/ts-api-utils/-/ts-api-utils-1.0.2.tgz#7c094f753b6705ee4faee25c3c684ade52d66d99"
   integrity sha512-Cbu4nIqnEdd+THNEsBdkolnOXhg0I8XteoHaEKgvsxpsbWda4IsUut2c187HxywQCvveojow0Dgw/amxtSKVkQ==
 
+ts-custom-error@^3.2.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/ts-custom-error/-/ts-custom-error-3.3.1.tgz#8bd3c8fc6b8dc8e1cb329267c45200f1e17a65d1"
+  integrity sha512-5OX1tzOjxWEgsr/YEUWSuPrQ00deKLh6D7OTWcvNHm12/7QPyRh8SYpyWvA4IZv8H/+GQWQEh/kwo95Q9OVW1A==
+
 tsconfig-paths@^3.14.2:
   version "3.14.2"
   resolved "https://maven.utpf.cn/repository/npm-public/tsconfig-paths/-/tsconfig-paths-3.14.2.tgz#6e32f1f79412decd261f92d633a9dc1cfa99f088"
@@ -12683,6 +12729,13 @@ webpack@5.88.2:
     terser-webpack-plugin "^5.3.7"
     watchpack "^2.4.0"
     webpack-sources "^3.2.3"
+
+webrtc-adapter@^8.2.3:
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-8.2.3.tgz#85e5e52ea68e808be8d6db85e338aa5c95e80022"
+  integrity sha512-gnmRz++suzmvxtp3ehQts6s2JtAGPuDPjA1F3a9ckNpG1kYdYuHWYpazoAnL9FS5/B21tKlhkorbdCXat0+4xQ==
+  dependencies:
+    sdp "^3.2.0"
 
 websocket-driver@>=0.5.1, websocket-driver@^0.7.4:
   version "0.7.4"

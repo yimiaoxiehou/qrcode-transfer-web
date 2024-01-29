@@ -47,7 +47,11 @@
     "@ng-toolkit/universal": "1.1.21",
     "@nguniversal/express-engine": "^16.2.0",
     "@sec-ant/zxing-wasm": "^2.1.5",
+    "@twilio/webrtc": "^4.6.0",
     "@types/md5": "^2.3.2",
+    "@zxing/browser": "^0.1.4",
+    "@zxing/library": "^0.20.0",
+    "detectrtc": "^1.4.1",
     "express": "^4.15.2",
     "filesize": "^10.0.12",
     "gzipper": "^7.2.0",
@@ -58,6 +62,7 @@
     "qrcode": "1.5.3",
     "rxjs": "^7.8.1",
     "tslib": "^2.3.0",
+    "webrtc-adapter": "^8.2.3",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
@@ -82,6 +87,7 @@
     "@types/node": "^16.11.7",
     "@types/pako": "^2.0.0",
     "@types/qrcode": "^1.5.2",
+    "@types/webrtc": "^0.0.41",
     "@typescript-eslint/eslint-plugin": "~6.4.1",
     "@typescript-eslint/parser": "~6.4.1",
     "eslint": "^8.48.0",

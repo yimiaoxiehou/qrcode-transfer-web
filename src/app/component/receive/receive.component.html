@@ -1,33 +1,26 @@
-<video id="video"></video>
-<ng-template [ngIf]="!cameraReady" [ngIfElse]="scan">
-  <button nz-button nzType="primary" (click)="check()" nzSize="large">开始接收</button>
-</ng-template>
-
-<ng-template #scan>
-  <app-zxing-scanner-wasm [useFrontCamera]="false" (result)="decodeResult($event)" />
-  <canvas #stage id="stage" style="margin: 2px" (click)="showProgressDetail($event)"></canvas>
-  <nz-modal [(nzVisible)]="isVisible" [nzMaskClosable]="false" [nzWidth]="'650px'" (nzOnCancel)="handleOk()" [nzFooter]="null">
-    <ng-container *nzModalContent>
-      <ng-container>
-        <nz-form-item>
-          <nz-form-label [nzSpan]="6">文件名</nz-form-label>
-          <nz-form-control [nzSpan]="12">{{ filename }}</nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label [nzSpan]="6">文件大小</nz-form-label>
-          <nz-form-control [nzSpan]="12">{{ filesize }}</nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label [nzSpan]="6">文件 MD5</nz-form-label>
-          <nz-form-control [nzSpan]="12">{{ filehash }}</nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label [nzSpan]="6">下载链接</nz-form-label>
-          <nz-form-control [nzSpan]="12"
-            ><a [href]="fileUrl" [download]="filename">{{ filename }}</a></nz-form-control
-          >
-        </nz-form-item>
-      </ng-container>
+<app-zxing-scanner-wasm [useFrontCamera]="false" (result)="decodeResult($event)" />
+<canvas #stage style="margin: 2px" (click)="showProgressDetail($event)"></canvas>
+<nz-modal [(nzVisible)]="isVisible" [nzMaskClosable]="false" [nzWidth]="'650px'" (nzOnCancel)="handleOk()" [nzFooter]="null">
+  <ng-container *nzModalContent>
+    <ng-container>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">文件名</nz-form-label>
+        <nz-form-control [nzSpan]="12">{{ filename }}</nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">文件大小</nz-form-label>
+        <nz-form-control [nzSpan]="12">{{ filesize }}</nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">文件 MD5</nz-form-label>
+        <nz-form-control [nzSpan]="12">{{ filehash }}</nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">下载链接</nz-form-label>
+        <nz-form-control [nzSpan]="12"
+          ><a [href]="fileUrl" [download]="filename">{{ filename }}</a></nz-form-control
+        >
+      </nz-form-item>
     </ng-container>
-  </nz-modal>
-</ng-template>
+  </ng-container>
+</nz-modal>

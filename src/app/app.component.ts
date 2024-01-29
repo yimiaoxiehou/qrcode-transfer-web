@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
         <ul nz-menu nzTheme="dark" nzMode="horizontal">
           <li nz-menu-item [routerLink]="'transfer'" nzMatchRouter="true">发送</li>
           <li nz-menu-item [routerLink]="'receive'" nzMatchRouter="true">接收</li>
+          <li nz-menu-item [routerLink]="'receive-apple'" nzMatchRouter="true">接收</li>
         </ul>
       </nz-header>
       <nz-content>

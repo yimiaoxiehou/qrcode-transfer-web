@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
-import { ZXingReadOptions, ZXingReadOutput, readBarcodeFromImageData, setZXingModuleOverrides } from '@sec-ant/zxing-wasm';
+import { ZXingReadOutput } from '@sec-ant/zxing-wasm';
+import { BrowserCodeReader, BrowserQRCodeReader } from '@zxing/browser';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Observable, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-zxing-scanner-wasm',
@@ -10,18 +10,15 @@ import { Observable, distinctUntilChanged } from 'rxjs';
   styleUrls: ['./zxing-scanner-wasm.component.css']
 })
 export class ZxingScannerWasmComponent implements AfterViewInit {
-  @ViewChild('canvas')
-  canvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('video')
+  video!: ElementRef<HTMLVideoElement>;
   @Input('useFrontCamera')
   useFrontCamera!: boolean;
+  browserCodeReader: BrowserCodeReader = new BrowserQRCodeReader();
   @Output()
   result = new EventEmitter<ZXingReadOutput[]>();
   cameraId!: string;
   zxing: any = null;
-  zxingReadOptions: ZXingReadOptions = {
-    formats: ['QRCode'],
-    maxSymbols: 1
-  };
   messageService: NzMessageService;
 
   constructor(
@@ -61,74 +58,13 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
   }
 
   decodeFromCamera(stream: MediaStream): void {
-    console.log(stream.getVideoTracks());
-    const track = stream.getVideoTracks()[0];
-    console.log(track.contentHint);
-    console.log(4);
-    const media_processor = new MediaStreamTrackProcessor(track);
-    console.log(4);
-    const canvas = this.canvas.nativeElement;
-    console.log(4);
-    const ctx = canvas.getContext('2d');
-    console.log(4);
-    if (ctx === null) {
-      return;
-    }
-    this.decodeFromReader(media_processor.readable.getReader(), canvas, ctx)
-      .pipe(
-        // 去重
-        distinctUntilChanged((p, c) => {
-          if (p.length !== c.length) {
-            return false;
-          }
-          for (let i = 0; i < p.length; i++) {
-            if (p[i].text !== c[i].text) {
-              return false;
-            }
-          }
-          return true;
-        })
-      )
-      .subscribe(r => this.result.emit(r));
-  }
-
-  decodeFromReader(
-    reader: ReadableStreamDefaultReader<VideoFrame>,
-    canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D
-  ): Observable<ZXingReadOutput[]> {
-    return new Observable(subscriber => {
-      const pump = () => {
-        console.log(1);
-        reader
-          .read()
-          .then(({ done, value }) => {
-            console.log(11);
-            if (done) {
-              return;
-            } else {
-              canvas.height = value.codedHeight;
-              canvas.width = value.codedWidth;
-              ctx.clearRect(0, 0, canvas.width, canvas.height);
-              ctx.save();
-              ctx.drawImage(value, 0, 0, canvas.width, canvas.height);
-              ctx.restore();
-              value.close();
-              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-              return readBarcodeFromImageData(imageData, this.zxingReadOptions);
-            }
-          })
-          .then(output => {
-            subscriber.next(output);
-            pump();
-          });
-      };
-      pump();
-      return () => {
-        reader.cancel();
-      };
+    this.browserCodeReader.decodeFromStream(stream, this.video.nativeElement, (result: any, error: any) => {
+      console.log(error);
+      console.log(result);
+      if (!error) {
+        result.bytes = result.rawBytes;
+        this.result.emit(Array.of(result));
+      }
     });
   }
 }
-
-declare var MediaStreamTrackProcessor: any;

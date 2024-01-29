@@ -6,7 +6,8 @@
     "schematicCollections": [
       "@schematics/angular",
       "ng-alain"
-    ]
+    ],
+    "analytics": "12849462-a1f1-416c-99b6-bc1d9122934a"
   },
   "newProjectRoot": "projects",
   "projects": {
