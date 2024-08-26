@@ -1,33 +1,31 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "sourceMap": true,
-    "inlineSources": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "ES6",
-    "module": "ES6",
-    "useDefineForClassFields": false,
+    "moduleResolution": "bundler",
+    "importHelpers": false,
+    "target": "ES2022",
+    "module": "ES2022",
     "lib": [
-      "ES6",
-      "dom",
-      "dom.iterable",
-      "esnext"
+      "ES2022",
+      "dom"
     ],
     "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
     "paths": {
-      "tlds": ["./tlds.d.ts"],
       "@shared": [
         "src/app/shared/index"
       ],
@@ -36,6 +34,9 @@
       ],
       "@env/*": [
         "src/environments/*"
+      ],
+      "@_mock": [
+        "_mock/index"
       ]
     }
   },

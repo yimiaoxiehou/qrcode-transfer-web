@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { NzLayoutComponent, NzHeaderComponent, NzContentComponent } from 'ng-zorro-antd/layout';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [NzLayoutComponent, NzHeaderComponent, NzContentComponent, RouterLink, RouterOutlet],
   template: `
     <nz-layout class="layout">
       <nz-header>

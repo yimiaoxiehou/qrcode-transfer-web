@@ -1,11 +1,16 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { SharedModule } from '@shared';
 import { filesize } from 'filesize';
-import * as md5 from 'md5';
+import md5 from 'md5';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import pako from 'pako';
 
+import { ZxingWasmModule } from '../zxing-wasm/zxing-wasm.module';
+
 @Component({
   selector: 'app-receive',
+  standalone: true,
+  imports: [SharedModule, ZxingWasmModule],
   templateUrl: './receive.component.html',
   styles: [
     `

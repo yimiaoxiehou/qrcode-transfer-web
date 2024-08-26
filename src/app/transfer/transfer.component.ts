@@ -1,14 +1,20 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { SharedModule } from '@shared';
 import { filesize } from 'filesize';
 import md5 from 'md5';
+import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { StyleObjectLike } from 'ng-zorro-antd/modal';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import pako from 'pako';
 import { QRCodeSegment } from 'qrcode';
-import { Observable, Subscription, interval, timer } from 'rxjs';
+import { Observable, Subscription, interval } from 'rxjs';
+
+import { QRCodeComponent } from '../qrcode/qrcode.component';
 
 @Component({
   selector: 'app-transfer',
+  standalone: true,
+  imports: [SharedModule, NzInputNumberComponent, QRCodeComponent],
   templateUrl: './transfer.component.html',
   styles: [
     `
@@ -47,6 +53,8 @@ export class TransferComponent implements AfterViewInit {
   filename!: string;
   // 文件大小
   filesize!: string;
+  // 文件切片
+  filesplit!: string[];
   // 文件hash
   filehash!: string;
   // 模态框样式

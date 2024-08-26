@@ -1,5 +1,5 @@
 <nz-card style="width: 400px; height: 40vh; max-width: 80vw; margin: 150px auto">
-  <nz-radio-group [(ngModel)]="loopTime" (ngModelChange)="changeLoopSpeed()">
+  <nz-radio-group ngDefaultControl [(ngModel)]="loopTime" (ngModelChange)="changeLoopSpeed()">
     <label nz-radio nzValue="100">快速</label>
     <label nz-radio nzValue="200">中速</label>
     <label nz-radio nzValue="400">慢速</label>
@@ -45,6 +45,7 @@
             <div nz-col nzSpan="6">
               <nz-input-number
                 nzSize="small"
+                ngDefaultControl
                 [(ngModel)]="loopStart"
                 (ngModelChange)="setResetLoop()"
                 [nzMin]="0"
@@ -56,6 +57,7 @@
             <div nz-col nzSpan="6">
               <nz-input-number
                 nzSize="small"
+                ngDefaultControl
                 [(ngModel)]="loopEnd"
                 (ngModelChange)="setResetLoop()"
                 [nzMin]="0"

@@ -119,7 +119,7 @@ module.exports = {
     },
     {
       files: ['*.html'],
-      excludedFiles: ['*inline-template-*.module.html'],
+      excludedFiles: ['*inline-template-*.component.html'],
       extends: ['plugin:prettier/recommended'],
       rules: {
         'prettier/prettier': ['error', { parser: 'angular' }],
