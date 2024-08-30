@@ -3258,6 +3258,11 @@
     "@typescript-eslint/types" "7.18.0"
     eslint-visitor-keys "^3.4.3"
 
+"@undecaf/zbar-wasm@0.11.0":
+  version "0.11.0"
+  resolved "https://registry.npmmirror.com/@undecaf/zbar-wasm/-/zbar-wasm-0.11.0.tgz#dd78278388e45f13a26ce05347fcb7571a14f3e1"
+  integrity sha512-z2UZ+Uc50+qyE+HbU+Obdk/E5ecB7xYiu0i99bHQ9VlZVH0JMmE/5mJQa16Cutvwt80C9OZl8jEVayf5s5Azow==
+
 "@ungap/structured-clone@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmmirror.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
@@ -9066,7 +9071,7 @@ ng-alain@^18.1.0:
     ng-alain-sts "^0.0.2"
     swagger-typescript-api "^12.0.4"
 
-ng-zorro-antd@18.1.1, ng-zorro-antd@^18.1.0:
+ng-zorro-antd@^18.1.0, ng-zorro-antd@^18.1.1:
   version "18.1.1"
   resolved "https://registry.npmmirror.com/ng-zorro-antd/-/ng-zorro-antd-18.1.1.tgz#a0880494650332e792a3c5f3442b3623a4f3d6b1"
   integrity sha512-YbJN/87XGsKbAwBJH7ci/01Y30QCwJsQU8FtVhtAd5JsB/NsBAfYfsIoPgch6ZUPZ3Jo2+3UA/pTCx1DliagHg==
@@ -13241,6 +13246,11 @@ yoctocolors-cjs@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmmirror.com/yoctocolors-cjs/-/yoctocolors-cjs-2.1.2.tgz#f4b905a840a37506813a7acaa28febe97767a242"
   integrity sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA==
+
+zbar-angular.wasm@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/zbar-angular.wasm/-/zbar-angular.wasm-1.0.0.tgz#0d1344149f2bd34a956529309ad57693f8aeff21"
+  integrity sha512-bZmKFw/T8epplLMT1St8TyYV6VAkZxtWbHsOoLZWyowMhzoQtWhbe5NyGQATeUxRej/dh1UVYVeivgD0NMr8mw==
 
 zone.js@~0.14.10:
   version "0.14.10"

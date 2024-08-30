@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { ZxingScannerWasmComponent } from './zxing-scanner-wasm/zxing-scanner-wasm.component';
+import { ZxingScannerWasmComponent } from './zxing-scanner-wasm.component';
 
 @NgModule({
   imports: [CommonModule],

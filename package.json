@@ -50,6 +50,7 @@
     "@sec-ant/zxing-wasm": "^2.2.0",
     "@twilio/webrtc": "^4.6.0",
     "@types/md5": "^2.3.2",
+    "@undecaf/zbar-wasm": "0.11.0",
     "@zxing/browser": "^0.1.5",
     "@zxing/library": "^0.20.0",
     "detectrtc": "^1.4.1",
@@ -58,13 +59,14 @@
     "gzipper": "8.1.0",
     "md5": "^2.3.0",
     "ng-alain": "^18.1.0",
-    "ng-zorro-antd": "18.1.1",
+    "ng-zorro-antd": "^18.1.1",
     "ngx-webcam": "^0.4.1",
     "pako": "^2.1.0",
     "qrcode": "1.5.3",
     "rxjs": "^7.8.1",
     "tslib": "^2.3.0",
     "webrtc-adapter": "^9.0.1",
+    "zbar-angular.wasm": "^1.0.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {

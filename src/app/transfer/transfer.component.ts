@@ -1,20 +1,20 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { SharedModule } from '@shared';
 import { filesize } from 'filesize';
 import md5 from 'md5';
-import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { StyleObjectLike } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import pako from 'pako';
 import { QRCodeSegment } from 'qrcode';
-import { Observable, Subscription, interval } from 'rxjs';
+import { Subscription, BehaviorSubject, interval } from 'rxjs';
+import { distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 
 import { QRCodeComponent } from '../qrcode/qrcode.component';
 
 @Component({
   selector: 'app-transfer',
   standalone: true,
-  imports: [SharedModule, NzInputNumberComponent, QRCodeComponent],
+  imports: [SharedModule, QRCodeComponent],
   templateUrl: './transfer.component.html',
   styles: [
     `
@@ -24,31 +24,7 @@ import { QRCodeComponent } from '../qrcode/qrcode.component';
     `
   ]
 })
-export class TransferComponent implements AfterViewInit {
-  // 二维码图片大小
-  qrcodeSize = 2000;
-  // 二维码数据
-  value: QRCodeSegment[] = [];
-  // 二维码数据
-  data: QRCodeSegment[][] = [];
-  // 循环索引
-  loopIndex!: number;
-  // 总循环次数
-  total!: number;
-  // 循环定时器
-  intervalId!: NodeJS.Timeout;
-  // 循环起始索引
-  loopStart!: number;
-  // 循环结束索引
-  loopEnd!: number;
-  // 是否重置循环
-  resetLoop = false;
-  // 循环时间
-  loopTime = 100;
-  // 定时器订阅
-  timerSub!: Observable<number>;
-  // 订阅
-  suber!: Subscription;
+export class TransferComponent {
   // 文件名
   filename!: string;
   // 文件大小
@@ -57,50 +33,42 @@ export class TransferComponent implements AfterViewInit {
   filesplit!: string[];
   // 文件hash
   filehash!: string;
-  // 模态框样式
-  modalBodyStyle!: StyleObjectLike;
+  // 二维码图片大小
+  qrcodeSize = 1900;
+  // 二维码数据
+  value: QRCodeSegment[] = [];
+  // 二维码数据
+  data: QRCodeSegment[][] = [];
+  // 总循环次数
+  total!: number;
+  // 循环索引
+  loopIndex!: number;
+  // 循环起始索引
+  loopStart!: number;
+  // 跳过
+  loopOffset = 0;
+  // 循环结束索引
+  loopEnd!: number;
+  // 循环时间定时器
+  playSpeed = 5;
+  playStop = false;
+  loopTimeSub = new BehaviorSubject(4000 / (this.playSpeed * 2));
+  // 订阅
+  suber!: Subscription;
+  // 通知服务
+  notification: NzNotificationService;
 
-  constructor() {
-    this.modalBodyStyle = {
-      padding: '0 24px'
-    };
-  }
-  ngAfterViewInit(): void {
-    this.changeLoopSpeed();
-  }
-  changeLoopSpeed(): void {
-    this.timerSub = interval(this.loopTime);
+  constructor(notification: NzNotificationService) {
+    this.notification = notification;
   }
 
   change(e: NzUploadChangeParam): void {
-    if (this.suber) {
-      this.suber.unsubscribe();
-    }
     // 显示模态框
     this.isVisible = true;
     const file = e.file.originFileObj;
     if (!file) {
       return;
     }
-    // 订阅定时器
-    this.suber = this.timerSub.subscribe(() => {
-      // 循环范围限制
-      if (this.loopIndex < this.loopStart) {
-        this.loopIndex = this.loopStart;
-      }
-      if (this.loopIndex > this.loopEnd) {
-        this.loopIndex = 1;
-      }
-      if (this.resetLoop === true) {
-        this.resetLoop = false;
-        this.loopIndex = this.loopStart;
-      }
-
-      // 获取当前循环数据
-      this.value = this.data[this.loopIndex - 1];
-      // 循环索引自增
-      this.loopIndex += 1;
-    });
     // 获取文件字节
     file
       .arrayBuffer()
@@ -111,7 +79,7 @@ export class TransferComponent implements AfterViewInit {
         return bytes;
       })
       .then(pako.deflate)
-      .then(bytes => this.concatUint8Array(this.stringToBytes(`${encodeURIComponent(file.name)}|${file.type}|`), bytes))
+      .then(bytes => this.concatUint8Array(this.stringToBytes(`${encodeURIComponent(file.name)}|${file.type}|${this.filehash}|`), bytes))
       .then(data => {
         // 获取文件名
         this.filename = file.name;
@@ -137,6 +105,28 @@ export class TransferComponent implements AfterViewInit {
           ]);
         }
       });
+    this.resetLoop();
+  }
+
+  resetLoop(): void {
+    if (this.suber) {
+      this.suber.unsubscribe();
+    }
+    this.loopOffset = 0;
+    this.playStop = false;
+    this.suber = this.loopTimeSub
+      .pipe(
+        switchMap(val => interval(val)),
+        map((val: number) => {
+          this.loopIndex = ((val + this.loopOffset) % (this.loopEnd - this.loopStart + 1)) + this.loopStart;
+          return this.loopIndex;
+        }),
+        distinctUntilChanged(),
+        tap((val: number) => {
+          this.value = this.data[val - 1];
+        })
+      )
+      .subscribe();
   }
 
   // 将字符串转换为字节
@@ -167,15 +157,55 @@ export class TransferComponent implements AfterViewInit {
   // 确认操作
   handleOk(): void {
     this.isVisible = false;
+    if (this.suber) {
+      this.suber.unsubscribe();
+    }
+    this.loopTimeSub = new BehaviorSubject(4000 / (this.playSpeed * 2));
+    this.filename = '';
+    this.filesize = '';
+    this.filesplit = [];
+    this.filehash = '';
+    this.value = [];
+    this.data = [];
+    this.total = 0;
+    this.loopIndex = 0;
+    this.loopStart = 0;
+    this.loopOffset = 0;
+    this.loopEnd = 0;
+    this.playSpeed = 4;
+    this.playStop = false;
+    this.loopTimeSub = new BehaviorSubject(4000 / (this.playSpeed * 2));
   }
 
   // 取消操作
   handleCancel(): void {
-    this.isVisible = false;
+    this.handleOk();
   }
 
   // 重置循环
   setResetLoop(): void {
-    this.resetLoop = true;
+    this.resetLoop();
+  }
+
+  loopTimeChange(val: number): void {
+    this.loopTimeSub.next(4000000000 / (val * 2));
+    this.loopOffset = this.loopIndex;
+  }
+
+  forward(): void {
+    this.loopOffset += Math.floor((this.loopEnd - this.loopStart) / 10);
+  }
+
+  backward(): void {
+    this.loopOffset -= Math.floor((this.loopEnd - this.loopStart) / 10);
+  }
+
+  stop(): void {
+    this.playStop = !this.playStop;
+    if (!this.playStop) {
+      this.loopTimeChange(this.playSpeed * 1000000);
+    } else {
+      this.loopTimeChange(1);
+    }
   }
 }

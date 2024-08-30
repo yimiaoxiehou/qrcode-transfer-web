@@ -6,12 +6,14 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-zxing-scanner-wasm',
-  templateUrl: './zxing-scanner-wasm.component.html',
-  styleUrls: ['./zxing-scanner-wasm.component.css']
+  template: '<video #video></video>',
+  styles: ''
 })
 export class ZxingScannerWasmComponent implements AfterViewInit {
   @ViewChild('video')
   video!: ElementRef<HTMLVideoElement>;
+  @Input('videoWidth')
+  videoWidth: string = '200px';
   @Input('useFrontCamera')
   useFrontCamera!: boolean;
   browserCodeReader: BrowserCodeReader = new BrowserQRCodeReader();
@@ -36,6 +38,7 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
     if (nav.mediaDevices === undefined) {
       return;
     }
+    this.video.nativeElement.setAttribute('width', this.videoWidth);
     const mediaDevices = nav.mediaDevices;
     // 这里对生成视频进行配置
     var userMediaConstraints = {
@@ -44,6 +47,7 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
         facingMode: 'environment'
       }
     };
+    console.log(mediaDevices);
     mediaDevices.getUserMedia(userMediaConstraints).then(stream => {
       // setZXingModuleOverrides({
       //   locateFile: (path: string, prefix: any) => {
@@ -59,7 +63,7 @@ export class ZxingScannerWasmComponent implements AfterViewInit {
 
   decodeFromCamera(stream: MediaStream): void {
     this.browserCodeReader.decodeFromStream(stream, this.video.nativeElement, (result: any, error: any) => {
-      console.log(error);
+      console.error(error);
       console.log(result);
       if (!error) {
         result.bytes = result.rawBytes;

@@ -14,7 +14,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
@@ -44,5 +46,8 @@ export const SHARED_ZORRO_MODULES = [
   NzCheckboxModule,
   NzSpinModule,
   NzInputNumberModule,
-  NzUploadModule
+  NzUploadModule,
+  NzRadioModule,
+  NzSliderModule,
+  NzIconModule
 ];

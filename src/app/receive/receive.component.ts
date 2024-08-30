@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { SharedModule } from '@shared';
 import { filesize } from 'filesize';
 import md5 from 'md5';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import pako from 'pako';
 
 import { ZxingWasmModule } from '../zxing-wasm/zxing-wasm.module';
@@ -19,10 +20,18 @@ import { ZxingWasmModule } from '../zxing-wasm/zxing-wasm.module';
         width: 100%;
         height: auto;
       }
+
+      .receive-content {
+        width: 100%;
+        max-width: 100%;
+      }
     `
   ]
 })
-export class ReceiveComponent {
+export class ReceiveComponent implements AfterViewInit {
+  videoWidth!: string;
+  @ViewChild('receiveContent')
+  receiveContentEle!: ElementRef;
   // 摄像头是否准备好
   cameraReady: boolean = false;
   // 文件内容
@@ -50,11 +59,19 @@ export class ReceiveComponent {
   bucketSize!: number;
   // 消息服务
   messageService: NzMessageService;
+  // 通知服务
+  notification: NzNotificationService;
   // 弹窗是否显示
   isVisible = false;
+  // 识别结果
+  result = '';
 
-  constructor(messageService: NzMessageService) {
+  constructor(messageService: NzMessageService, notification: NzNotificationService) {
     this.messageService = messageService;
+    this.notification = notification;
+  }
+  ngAfterViewInit(): void {
+    this.videoWidth = window.getComputedStyle(this.receiveContentEle.nativeElement).width;
   }
 
   decodeResult(results: Array<import('@sec-ant/zxing-wasm').ZXingReadOutput>) {
@@ -63,8 +80,9 @@ export class ReceiveComponent {
         return;
       }
       console.log(result);
+      this.result += result;
       // 二维码数据格式:
-      // 首页：   `${curPage}/${totalPage}|${filename}|${filetype}|${data}`
+      // 首页：   `${curPage}/${totalPage}|${filename}|${filetype}|${filehash}|${data}`
       // 其他页： `${curPage}/${totalPage}|${data}`
       const data = result.text.split('|');
       let t = data[0].split('/');
@@ -81,18 +99,21 @@ export class ReceiveComponent {
         this.fileContent = [];
         this.scanned = 0;
         this.filename = '';
+        this.filehash = '';
         this.type = '';
         this.total = total;
         this.buckets = new Array(total).fill(0);
         this.bucketSize = Math.ceil(total / 200);
         this.resetProgress();
+        this.result = '';
       }
 
       // 首页特殊处理
       if (page === 1) {
         this.filename = decodeURIComponent(data[1]);
         this.type = data[2];
-        headerLength = `${data[0]}|${data[1]}|${data[2]}|`.length;
+        headerLength = `${data[0]}|${data[1]}|${data[2]}|${data[3]}|`.length;
+        this.result = `正在接受 【${this.filename}】`;
       } else {
         headerLength = `${data[0]}|`.length;
       }
@@ -111,10 +132,14 @@ export class ReceiveComponent {
         let content = new Uint8Array();
         this.fileContent.forEach(c => (content = this.concatUint8Array(content, c)));
         content = pako.inflate(content);
-        this.filehash = md5(content);
+        const filehash = md5(content);
+        if (this.filehash !== filehash) {
+          this.notification.error('哈希值不一致', '哈希值不一致，文件可能已损坏。');
+        }
         this.filesize = filesize(content.length, { base: 2, standard: 'jedec' });
         const blob = new Blob([content], { type: this.type });
         this.fileUrl = window.URL.createObjectURL(blob);
+        console.log(this.fileUrl);
         this.fileContent = [];
       }
     });
@@ -205,9 +230,5 @@ export class ReceiveComponent {
       ctx.fillStyle = '#4CAF50';
       ctx.fill(rectangle);
     }
-  }
-
-  handleOk(): void {
-    this.isVisible = false;
   }
 }
